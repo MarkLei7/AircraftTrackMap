@@ -7,3 +7,8 @@
         起服务 npm start
         打包 npm run build
 - 三维轨迹展示地图 
+    使用cesium可视化坐标轨迹，添加飞机模型
+
+        npx create-cesium
+        npm run dev
+        npm run build
