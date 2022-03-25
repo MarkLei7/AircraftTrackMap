@@ -25,8 +25,6 @@ fetch('data/MU5735-Flightradar24-Granular-Data.csv').then(res=>res.text())
 .then(res=>res.map((r)=>r.split(",")))
 .then(res=>{
   console.log(res.shift())
-  console.log(res.pop())
-  
   setData(res)
   setRoute(data)
 })
@@ -53,25 +51,16 @@ const setData=(res=[])=>{
     }
 }
 const setRoute=(data=[])=>{
-    const a=data[0]
     
-    center=gcoord.transform(
-      [a.longitude,a.latitude],    // 经纬度坐标
-      gcoord.WGS84,               // 当前坐标系
-      gcoord.GCJ02                 // 目标坐标系
-    );
-    center=fromLonLat(center)
-    map.getView().setCenter(fromLonLat([111.110154,23.335977]))
+   
+   map.getView().setCenter(fromLonLat([111.111154,23.335977]))
     const R=[]
     
     for(const d of data){
-      // const a=gcoord.transform(
-      //   [d.longitude,d.latitude],    // 经纬度坐标
-      //   gcoord.WGS84,               // 当前坐标系
-      //   gcoord.GCJ02                 // 目标坐标系
-      // )
+     
       const a=[d.longitude,d.latitude]
       R.push(fromLonLat(a))
+      //R.push(a)
     }
     //console.log(R)
     
@@ -93,7 +82,9 @@ let route=new LineString(R)
    
     const LastMarker = new Feature({
       type: 'icon',
-      geometry: new Point(fromLonLat([111.110154,23.338277])),
+      
+      geometry: new Point(fromLonLat([111.1125244,23.3236111])),
+      //geometry: new Point([111.1125244,23.3236111]),
     });
     const position = startMarker.getGeometry().clone();
     const geoMarker = new Feature({
@@ -136,6 +127,58 @@ let route=new LineString(R)
     });
 
     map.addLayer(vectorLayer);
+
+    const speedInput = document.getElementById('speed');
+const startButton = document.getElementById('start-animation');
+let animating = false;
+let distance = 0;
+let lastTime;
+
+function moveFeature(event) {
+  const speed = Number(speedInput.value);
+  const time = event.frameState.time;
+  const elapsedTime = time - lastTime;
+  distance = (distance + (speed * elapsedTime) / 1e6) % 2;
+  lastTime = time;
+
+  const currentCoordinate = route.getCoordinateAt(
+    distance > 1 ? 2 - distance : distance
+  );
+  position.setCoordinates(currentCoordinate);
+  const vectorContext = getVectorContext(event);
+  vectorContext.setStyle(styles.geoMarker);
+  vectorContext.drawGeometry(position);
+  // tell OpenLayers to continue the postrender animation
+  map.render();
+}
+
+function startAnimation() {
+  animating = true;
+  lastTime = Date.now();
+  startButton.textContent = 'Stop Animation';
+  vectorLayer.on('postrender', moveFeature);
+  // hide geoMarker and trigger map render through change event
+  geoMarker.setGeometry(null);
+}
+
+function stopAnimation() {
+  animating = false;
+  startButton.textContent = 'Start Animation';
+
+  // Keep marker at current animation position
+  geoMarker.setGeometry(position);
+  vectorLayer.un('postrender', moveFeature);
+}
+
+startButton.addEventListener('click', function () {
+  if (animating) {
+    stopAnimation();
+  } else {
+    startAnimation();
+  }
+});
+
+
 }
 
 let center = [-5639523.95, -3501274.52];
@@ -148,6 +191,8 @@ const map = new Map({
   ],
   view: new View({
     center: center,
-    zoom: 15
+    zoom: 15,
+    // projection:"EPSG:4326"
   })
 });
+
