@@ -14,13 +14,7 @@ Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIzYTk5N
 const osmBuildings = viewer.scene.primitives.add(createOsmBuildings());
 async function setRoute()  {
    const Route= await fetch('data/MU5735-Flightradar24-Granular-Data.csv').then(res=>res.text())
-   const R=Route.split("\r\n")
-   console.log(R)
-   const res=[]
-   for(let i=0;i<R.length;i++){
-        res[i]=R[i].split(",")
-   }    
-   //const res = Route.split("\r\n").map((r) => r.split(","))
+   const res = Route.split("\n").map((r) => r.split(","))
    //res.shift()
    console.log(res)
    const start = JulianDate.fromIso8601(res[1][0].replace(" ", "T").slice(0, 20));
@@ -50,7 +44,7 @@ async function setRoute()  {
 
 setRoute()
 
-viewer.clock.multiplier = 1.3;
+viewer.clock.multiplier = 1.5;
 // Start playing the scene.
 viewer.clock.shouldAnimate = true;
 // STEP 6 CODE (airplane entity)
