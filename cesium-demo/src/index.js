@@ -47,6 +47,10 @@ setRoute()
 viewer.clock.multiplier = 1.5;
 // Start playing the scene.
 viewer.clock.shouldAnimate = true;
+//是否开启抗锯齿
+viewer.scene.fxaa = true;
+viewer.scene.postProcessStages.fxaa.enabled = true;
+
 // STEP 6 CODE (airplane entity)
 async function loadModel(start, stop, positionProperty) {
     // Load the glTF model from Cesium ion.
