@@ -4,7 +4,7 @@
  * import * as Cesium from 'cesium';
  * const viewer = new Cesium.Viewer('cesiumContainer');
  */
-import { Viewer, Ion, Color, createOsmBuildings, JulianDate, SampledPositionProperty, Cartesian3, IonResource, TimeIntervalCollection, TimeInterval, VelocityOrientationProperty, PathGraphics } from "cesium";
+import { Viewer, Ion, Color, createOsmBuildings, JulianDate, SampledPositionProperty, Cartesian3, IonResource, TimeIntervalCollection, TimeInterval, VelocityOrientationProperty, PathGraphics,HermitePolynomialApproximation } from "cesium";
 import "./css/main.css";
 
 const viewer = new Viewer("cesiumContainer");
@@ -35,6 +35,11 @@ async function setRoute()  {
            point: { pixelSize: 10, color: Color.RED }
        });
    }
+   positionProperty.setInterpolationOptions({
+    interpolationDegree : 2,    
+    interpolationAlgorithm:HermitePolynomialApproximation
+   })
+
    viewer.clock.startTime = timeP.clone();
    viewer.clock.stopTime = stop.clone();
    viewer.clock.currentTime = timeP.clone();
