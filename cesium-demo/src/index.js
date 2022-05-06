@@ -10,7 +10,7 @@ import "./css/main.css";
 const viewer = new Viewer("cesiumContainer");
 // Your access token can be found at: https://cesium.com/ion/tokens.
 // Replace `your_access_token` with your Cesium ion access token.
-Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIzYTk5NDZhNy1hZGRiLTQyNzUtYjRmZC0zZDM4ZDc0ZDRhZGQiLCJpZCI6NDYwNDcsImlhdCI6MTYxNTg3NTI1Mn0.QPYRQfxoUqWlLyFOYTbZKryd8BuVQCosSZD4tVlVpQ8';
+Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJiZjNlNGRkYS0wZDNkLTRjOTktODA0YS0wNmIzN2NiNWRmNjkiLCJpZCI6NDYwNDcsImlhdCI6MTYxNTc5ODU0M30.8zp9UO6iKUpccmQqEDea7ZHC4mSoWVyHnKmXr6W3oGk';
 const osmBuildings = viewer.scene.primitives.add(createOsmBuildings());
 async function setRoute()  {
    const Route= await fetch('data/MU5735-Flightradar24-Granular-Data.csv').then(res=>res.text())
